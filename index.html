@@ -3,93 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Background Website Template</title>
+    <title>3D Background Website Template (Babylon.js)</title>
     <!-- Tailwind CSS CDN -->
-     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- A-Frame CDN -->
-     <script src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Babylon.js CDN -->
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
     <style>
-         /* Apply Inter font and ensure full height */
- body {
-    font-family: 'Inter', sans-serif;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden; /* Prevent horizontal scroll */
-    min-height: 100vh; /* Ensure body takes at least full viewport height */
-}
+        /* Apply Inter font and ensure full height */
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            min-height: 100vh; /* Ensure body takes at least full viewport height */
+        }
 
-/* Style for the A-Frame scene to cover the background */
-.a-scene-full-background {
-    position: fixed; /* Use fixed to keep it in the background during scroll */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1; /* Place it behind other content */
-}
+        /* Style for the Babylon.js canvas to cover the background */
+        #renderCanvas {
+            position: fixed; /* Use fixed to keep it in the background during scroll */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Place it behind other content */
+            display: block;
+            outline: none; /* Remove focus outline */
+        }
 
-/* Ensure content layers correctly on top of the A-Frame scene */
-.content-layer {
-    position: relative;
-    z-index: 1; /* Place content above the A-Frame scene */
-}
+        /* Ensure content layers correctly on top of the Babylon.js canvas */
+        .content-layer {
+            position: relative;
+            z-index: 1; /* Place content above the Babylon.js canvas */
+        }
 
-/* Custom styles for hero section background image */
-.hero-background {
-    background-image: url('https://placehold.co/1920x1080/000000/FFFFFF?text=YOUR+HERO+IMAGE');
-    background-size: cover;
-    background-position: center;
-}
+        /* Custom styles for hero section background image */
+        .hero-background {
+            background-image: url('https://placehold.co/1920x1080/000000/FFFFFF?text=YOUR+HERO+IMAGE');
+            background-size: cover;
+            background-position: center;
+        }
 
-/* Ensure the A-Frame canvas itself is responsive */
-a-scene {
-    display: block;
-    width: 100%;
-    height: 100%;
-}
+        /* Animation for section transitions */
+        .section-hidden {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
 
-/* Animation for section transitions */
-.section-hidden {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-}
-
-.section-visible {
-    opacity: 1;
-    transform: translateY(0);
-}
+        .section-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
     </style>
 </head>
-<body class="relative bg-gray-900 text-gray-100">
+<body class="relative bg-gray-100 text-gray-900"> <!-- Changed body background and text color -->
 
-    <!-- A-Frame Scene for 3D Background -->
-    <a-scene embedded class="a-scene-full-background">
-        <a-entity light="type: ambient; color: #BBBBBB"></a-entity>
-        <a-entity light="type: directional; color: #FFFFFF; intensity: 0.8" position="-1 1 1"></a-entity>
-        <a-sky color="#222"></a-sky>
-
-        <a-entity
-            gltf-model="url(https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/DamagedHelmet/glTF/DamagedHelmet.gltf)"
-            position="0 1.5 -3"
-            rotation="0 45 0"
-            scale="1 1 1"
-            animation="property: rotation; to: 0 405 0; dur: 10000; easing: linear; loop: true"
-        ></a-entity>
-
-        <a-entity camera look-controls wasd-controls position="0 1.6 0"></a-entity>
-    </a-scene>
+    <!-- Babylon.js Canvas for 3D Background -->
+    <canvas id="renderCanvas"></canvas>
 
     <!-- Main Content Layer -->
     <div class="content-layer">
         <!-- Responsive Navigation Bar -->
-        <nav class="fixed top-0 left-0 right-0 bg-black/70 backdrop-blur-sm p-4 z-50 shadow-lg">
+        <nav class="fixed top-0 left-0 right-0 bg-white/70 backdrop-blur-sm p-4 z-50 shadow-lg"> <!-- Changed nav background -->
             <div class="container mx-auto flex justify-between items-center">
-                <a href="#hero" class="text-2xl font-bold text-white rounded-lg">Your Logo</a>
+                <a href="#hero" class="text-2xl font-bold text-gray-800 rounded-lg">Your Logo</a> <!-- Changed logo color -->
 
                 <!-- Mobile Menu Button (Hamburger) -->
                 <div class="md:hidden">
-                    <button id="mobile-menu-button" class="text-white focus:outline-none">
+                    <button id="mobile-menu-button" class="text-gray-800 focus:outline-none"> <!-- Changed button color -->
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
                         </svg>
@@ -98,29 +80,29 @@ a-scene {
 
                 <!-- Desktop Menu -->
                 <div class="hidden md:flex space-x-6">
-                    <a href="#hero" class="text-gray-300 hover:text-white transition duration-300 rounded-lg">Home</a>
-                    <a href="#features" class="text-gray-300 hover:text-white transition duration-300 rounded-lg">Features</a>
-                    <a href="#offer" class="text-gray-300 hover:text-white transition duration-300 rounded-lg">What We Offer</a>
-                    <a href="#services" class="text-gray-300 hover:text-white transition duration-300 rounded-lg">Services</a>
-                    <a href="#portfolio" class="text-gray-300 hover:text-white transition duration-300 rounded-lg">Portfolio</a>
-                    <a href="#contact" class="text-gray-300 hover:text-white transition duration-300 rounded-lg">Contact</a>
+                    <a href="#hero" class="text-gray-700 hover:text-red-600 transition duration-300 rounded-lg">Home</a> <!-- Changed text and hover color -->
+                    <a href="#features" class="text-gray-700 hover:text-red-600 transition duration-300 rounded-lg">Features</a>
+                    <a href="#offer" class="text-gray-700 hover:text-red-600 transition duration-300 rounded-lg">What We Offer</a>
+                    <a href="#services" class="text-gray-700 hover:text-red-600 transition duration-300 rounded-lg">Services</a>
+                    <a href="#portfolio" class="text-gray-700 hover:text-red-600 transition duration-300 rounded-lg">Portfolio</a>
+                    <a href="#contact" class="text-gray-700 hover:text-red-600 transition duration-300 rounded-lg">Contact</a>
                 </div>
             </div>
 
             <!-- Mobile Menu (Hidden by default) -->
             <div id="mobile-menu" class="hidden md:hidden mt-4 space-y-2">
-                <a href="#hero" class="block text-gray-300 hover:text-white transition duration-300 px-3 py-2 rounded-md">Home</a>
-                <a href="#features" class="block text-gray-300 hover:text-white transition duration-300 px-3 py-2 rounded-md">Features</a>
-                <a href="#offer" class="block text-gray-300 hover:text-white transition duration-300 px-3 py-2 rounded-md">What We Offer</a>
-                <a href="#services" class="block text-gray-300 hover:text-white transition duration-300 px-3 py-2 rounded-md">Services</a>
-                <a href="#portfolio" class="block text-gray-300 hover:text-white transition duration-300 px-3 py-2 rounded-md">Portfolio</a>
-                <a href="#contact" class="block text-gray-300 hover:text-white transition duration-300 px-3 py-2 rounded-md">Contact</a>
+                <a href="#hero" class="block text-gray-700 hover:text-red-600 transition duration-300 px-3 py-2 rounded-md">Home</a>
+                <a href="#features" class="block text-gray-700 hover:text-red-600 transition duration-300 px-3 py-2 rounded-md">Features</a>
+                <a href="#offer" class="block text-gray-700 hover:text-red-600 transition duration-300 px-3 py-2 rounded-md">What We Offer</a>
+                <a href="#services" class="block text-gray-700 hover:text-red-600 transition duration-300 px-3 py-2 rounded-md">Services</a>
+                <a href="#portfolio" class="block text-gray-700 hover:text-red-600 transition duration-300 px-3 py-2 rounded-md">Portfolio</a>
+                <a href="#contact" class="block text-gray-700 hover:text-red-600 transition duration-300 px-3 py-2 rounded-md">Contact</a>
             </div>
         </nav>
 
         <!-- Hero Section -->
-        <header id="hero" class="relative hero-background h-screen flex items-center justify-center text-white overflow-hidden pt-16"> <!-- Added pt-16 for navbar offset -->
-            <div class="absolute inset-0 bg-black opacity-40"></div>
+        <header id="hero" class="relative hero-background h-screen flex items-center justify-center text-gray-900 overflow-hidden pt-16"> <!-- Changed text color -->
+            <div class="absolute inset-0 bg-white opacity-40"></div> <!-- Changed overlay background -->
 
             <div class="relative z-10 text-center p-6 sm:p-8 md:p-12 max-w-4xl mx-auto section-hidden">
                 <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight mb-4 rounded-lg">
@@ -129,47 +111,50 @@ a-scene {
                 <p class="text-lg sm:text-xl md:text-2xl font-light mb-8 opacity-90 rounded-lg">
                     Immerse your visitors with stunning 3D backgrounds and modern design.
                 </p>
-                <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50">
+                <button class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-red-500 focus:ring-opacity-50"> <!-- Changed button color -->
                     Get Started
                 </button>
             </div>
         </header>
 
         <!-- Example Content Section 1: Features -->
-        <section id="features" class="py-16 px-4 sm:px-6 lg:px-8 bg-black/50 section-hidden">
+        <section id="features" class="py-16 px-4 sm:px-6 lg:px-8 bg-white/50 section-hidden"> <!-- Changed background -->
             <div class="max-w-6xl mx-auto text-center">
-                <h2 class="text-3xl sm:text-4xl font-bold mb-8 text-blue-400">Our Features</h2>
+                <h2 class="text-3xl sm:text-4xl font-bold mb-8 text-red-500">Our Features</h2> <!-- Changed title color -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="bg-black/60 p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 ease-in-out">
-                        <h3 class="text-xl font-semibold mb-3 text-white">Interactive 3D</h3>
-                        <p class="text-gray-300">Engage users with dynamic and interactive 3D models right on your homepage.</p>
+                    <div class="bg-white/60 p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 ease-in-out"> <!-- Changed background -->
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">Interactive 3D</h3> <!-- Changed text color -->
+                        <p class="text-gray-700">Engage users with dynamic and interactive 3D models right on your homepage.</p> <!-- Changed text color -->
                     </div>
-                    <div class="bg-black/60 p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 ease-in-out">
-                        <h3 class="text-xl font-semibold mb-3 text-white">Modern Design</h3>
-                        <p class="text-gray-300">Leverage Tailwind CSS for a sleek, responsive, and highly customizable interface.</p>
+                    <div class="bg-white/60 p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 ease-in-out">
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">Modern Design</h3>
+                        <p class="text-gray-700">Leverage Tailwind CSS for a sleek, responsive, and highly customizable interface.</p>
                     </div>
-                    <div class="bg-black/60 p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 ease-in-out">
-                        <h3 class="text-xl font-semibold mb-3 text-white">Performance Optimized</h3>
-                        <p class="text-gray-300">Built with efficiency in mind to ensure smooth loading and user experience.</p>
+                    <div class="bg-white/60 p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 ease-in-out">
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">Performance Optimized</h3>
+                        <p class="text-gray-700">Built with efficiency in mind to ensure smooth loading and user experience.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Example Content Section 2: What We Offer -->
-        <section id="offer" class="py-16 px-4 sm:px-6 lg:px-8 bg-black/70 section-hidden">
+        <!-- Example Content Section 2: What We Offer (Video Integrated) -->
+        <section id="offer" class="py-16 px-4 sm:px-6 lg:px-8 bg-white/70 section-hidden"> <!-- Changed background -->
             <div class="max-w-6xl mx-auto text-center">
-                <h2 class="text-3xl sm:text-4xl font-bold mb-8 text-blue-400">What We Offer</h2>
+                <h2 class="text-3xl sm:text-4xl font-bold mb-8 text-red-500">What We Offer</h2> <!-- Changed title color -->
                 <div class="flex flex-col md:flex-row items-center justify-center gap-12">
                     <div class="md:w-1/2">
-                        <img src="https://placehold.co/600x400/334155/FFFFFF?text=Awesome+Product" alt="Awesome Product" class="rounded-xl shadow-xl w-full h-auto object-cover">
+                        <video class="w-full h-auto max-w-full border border-gray-400 rounded-xl shadow-xl dark:border-gray-700" controls> <!-- Changed border color -->
+                            <source src="/docs/videos/flowbite.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
                     </div>
-                    <div class="md:w-1/2 text-left bg-black/50 p-6 rounded-xl shadow-lg">
-                        <p class="text-lg mb-4 text-gray-300">
+                    <div class="md:w-1/2 text-left bg-white/50 p-6 rounded-xl shadow-lg"> <!-- Changed background -->
+                        <p class="text-lg mb-4 text-gray-700"> <!-- Changed text color -->
                             Our platform provides a unique blend of cutting-edge technology and user-centric design.
                             From immersive experiences to robust backend solutions, we cover all your needs.
                         </p>
-                        <ul class="list-disc list-inside text-gray-300 space-y-2">
+                        <ul class="list-disc list-inside text-gray-700 space-y-2"> <!-- Changed text color -->
                             <li>Seamless 3D integration</li>
                             <li>Fully responsive layouts</li>
                             <li>Easy customization with Tailwind</li>
@@ -181,89 +166,89 @@ a-scene {
         </section>
 
         <!-- New Content Section 3: Our Services -->
-        <section id="services" class="py-16 px-4 sm:px-6 lg:px-8 bg-black/50 section-hidden">
+        <section id="services" class="py-16 px-4 sm:px-6 lg:px-8 bg-white/50 section-hidden"> <!-- Changed background -->
             <div class="max-w-6xl mx-auto text-center">
-                <h2 class="text-3xl sm:text-4xl font-bold mb-8 text-blue-400">Our Services</h2>
+                <h2 class="text-3xl sm:text-4xl font-bold mb-8 text-red-500">Our Services</h2> <!-- Changed title color -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div class="bg-black/60 p-6 rounded-xl shadow-lg">
-                        <h3 class="text-xl font-semibold mb-3 text-white">Web Development</h3>
-                        <p class="text-gray-300">Building responsive and high-performance websites tailored to your needs.</p>
+                    <div class="bg-white/60 p-6 rounded-xl shadow-lg"> <!-- Changed background -->
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">Web Development</h3>
+                        <p class="text-gray-700">Building responsive and high-performance websites tailored to your needs.</p>
                     </div>
-                    <div class="bg-black/60 p-6 rounded-xl shadow-lg">
-                        <h3 class="text-xl font-semibold mb-3 text-white">3D Modeling & Animation</h3>
-                        <p class="text-gray-300">Creating stunning 3D assets and animations for immersive web experiences.</p>
+                    <div class="bg-white/60 p-6 rounded-xl shadow-lg">
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">3D Modeling & Animation</h3>
+                        <p class="text-gray-700">Creating stunning 3D assets and animations for immersive web experiences.</p>
                     </div>
-                    <div class="bg-black/60 p-6 rounded-xl shadow-lg">
-                        <h3 class="text-xl font-semibold mb-3 text-white">UI/UX Design</h3>
-                        <p class="text-gray-300">Crafting intuitive and engaging user interfaces for optimal user satisfaction.</p>
+                    <div class="bg-white/60 p-6 rounded-xl shadow-lg">
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">UI/UX Design</h3>
+                        <p class="text-gray-700">Crafting intuitive and engaging user interfaces for optimal user satisfaction.</p>
                     </div>
-                    <div class="bg-black/60 p-6 rounded-xl shadow-lg">
-                        <h3 class="text-xl font-semibold mb-3 text-white">Consulting</h3>
-                        <p class="text-gray-300">Expert advice and strategy to elevate your digital presence.</p>
+                    <div class="bg-white/60 p-6 rounded-xl shadow-lg">
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">Consulting</h3>
+                        <p class="text-gray-700">Expert advice and strategy to elevate your digital presence.</p>
                     </div>
-                    <div class="bg-black/60 p-6 rounded-xl shadow-lg">
-                        <h3 class="text-xl font-semibold mb-3 text-white">Maintenance & Support</h3>
-                        <p class="text-gray-300">Ensuring your website remains up-to-date, secure, and performs flawlessly.</p>
+                    <div class="bg-white/60 p-6 rounded-xl shadow-lg">
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">Maintenance & Support</h3>
+                        <p class="text-gray-700">Ensuring your website remains up-to-date, secure, and performs flawlessly.</p>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- New Content Section: Our Portfolio with Advanced Cards -->
-        <section id="portfolio" class="py-16 px-4 sm:px-6 lg:px-8 bg-black/70 section-hidden">
+        <section id="portfolio" class="py-16 px-4 sm:px-6 lg:px-8 bg-white/70 section-hidden"> <!-- Changed background -->
             <div class="max-w-6xl mx-auto text-center">
-                <h2 class="text-3xl sm:text-4xl font-bold mb-12 text-blue-400">Our Portfolio</h2>
+                <h2 class="text-3xl sm:text-4xl font-bold mb-12 text-red-500">Our Portfolio</h2> <!-- Changed title color -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 
                     <!-- Portfolio Card 1 -->
-                    <div class="bg-black/60 p-6 rounded-xl shadow-lg group relative overflow-hidden
-                                transform hover:scale-105 hover:shadow-2xl hover:bg-black/70
-                                transition-all duration-500 ease-in-out">
+                    <div class="bg-white/60 p-6 rounded-xl shadow-lg group relative overflow-hidden
+                                transform hover:scale-105 hover:shadow-2xl hover:bg-white/70
+                                transition-all duration-500 ease-in-out"> <!-- Changed background -->
                         <img src="https://placehold.co/400x250/334155/FFFFFF?text=Project+Alpha" alt="Project Alpha"
                              class="rounded-lg mb-4 w-full h-auto transform group-hover:scale-110
                                     transition-transform duration-500 ease-in-out">
                         <div class="relative z-10 transform group-hover:-translate-y-2
                                     transition-transform duration-500 ease-in-out">
-                            <h3 class="text-xl font-semibold mb-2 text-white">Immersive VR Experience</h3>
-                            <p class="text-gray-300 text-sm mb-4">Developed a stunning virtual reality application for real estate visualization, featuring interactive 3D models.</p>
-                            <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full text-sm
-                                           transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                            <h3 class="text-xl font-semibold mb-2 text-gray-800">Immersive VR Experience</h3>
+                            <p class="text-gray-700 text-sm mb-4">Developed a stunning virtual reality application for real estate visualization, featuring interactive 3D models.</p>
+                            <button class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full text-sm
+                                           transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"> <!-- Changed button color -->
                                 Learn More
                             </button>
                         </div>
                     </div>
 
                     <!-- Portfolio Card 2 -->
-                    <div class="bg-black/60 p-6 rounded-xl shadow-lg group relative overflow-hidden
-                                transform hover:scale-105 hover:shadow-2xl hover:bg-black/70
+                    <div class="bg-white/60 p-6 rounded-xl shadow-lg group relative overflow-hidden
+                                transform hover:scale-105 hover:shadow-2xl hover:bg-white/70
                                 transition-all duration-500 ease-in-out">
                         <img src="https://placehold.co/400x250/475569/FFFFFF?text=Project+Beta" alt="Project Beta"
                              class="rounded-lg mb-4 w-full h-auto transform group-hover:scale-110
                                     transition-transform duration-500 ease-in-out">
                         <div class="relative z-10 transform group-hover:-translate-y-2
                                     transition-transform duration-500 ease-in-out">
-                            <h3 class="text-xl font-semibold mb-2 text-white">E-commerce Platform Redesign</h3>
-                            <p class="text-gray-300 text-sm mb-4">Revamped an existing e-commerce site with a modern, responsive design and integrated 3D product views.</p>
-                            <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full text-sm
-                                           transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                            <h3 class="text-xl font-semibold mb-2 text-gray-800">E-commerce Platform Redesign</h3>
+                            <p class="text-gray-700 text-sm mb-4">Revamped an existing e-commerce site with a modern, responsive design and integrated 3D product views.</p>
+                            <button class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full text-sm
+                                           transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">
                                 Learn More
                             </button>
                         </div>
                     </div>
 
                     <!-- Portfolio Card 3 -->
-                    <div class="bg-black/60 p-6 rounded-xl shadow-lg group relative overflow-hidden
-                                transform hover:scale-105 hover:shadow-2xl hover:bg-black/70
+                    <div class="bg-white/60 p-6 rounded-xl shadow-lg group relative overflow-hidden
+                                transform hover:scale-105 hover:shadow-2xl hover:bg-white/70
                                 transition-all duration-500 ease-in-out">
                         <img src="https://placehold.co/400x250/64748B/FFFFFF?text=Project+Gamma" alt="Project Gamma"
                              class="rounded-lg mb-4 w-full h-auto transform group-hover:scale-110
                                     transition-transform duration-500 ease-in-out">
                         <div class="relative z-10 transform group-hover:-translate-y-2
                                     transition-transform duration-500 ease-in-out">
-                            <h3 class="text-xl font-semibold mb-2 text-white">Interactive Data Visualization</h3>
-                            <p class="text-gray-300 text-sm mb-4">Created a dynamic web application for visualizing complex datasets using interactive 3D charts and graphs.</p>
-                            <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full text-sm
-                                           transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                            <h3 class="text-xl font-semibold mb-2 text-gray-800">Interactive Data Visualization</h3>
+                            <p class="text-gray-700 text-sm mb-4">Created a dynamic web application for visualizing complex datasets using interactive 3D charts and graphs.</p>
+                            <button class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full text-sm
+                                           transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">
                                 Learn More
                             </button>
                         </div>
@@ -274,43 +259,43 @@ a-scene {
         </section>
 
         <!-- New Content Section 4: Call to Action / Testimonials -->
-        <section id="testimonials" class="py-16 px-4 sm:px-6 lg:px-8 bg-black/70 section-hidden">
+        <section id="testimonials" class="py-16 px-4 sm:px-6 lg:px-8 bg-white/70 section-hidden"> <!-- Changed background -->
             <div class="max-w-4xl mx-auto text-center">
-                <h2 class="text-3xl sm:text-4xl font-bold mb-8 text-blue-400">What Our Clients Say</h2>
-                <div class="bg-black/60 p-8 rounded-xl shadow-lg mb-8">
-                    <p class="text-xl italic text-gray-200 mb-4">
+                <h2 class="text-3xl sm:text-4xl font-bold mb-8 text-red-500">What Our Clients Say</h2> <!-- Changed title color -->
+                <div class="bg-white/60 p-8 rounded-xl shadow-lg mb-8"> <!-- Changed background -->
+                    <p class="text-xl italic text-gray-800 mb-4"> <!-- Changed text color -->
                         "The 3D background truly transformed our website! It's visually stunning and incredibly unique. The team was a pleasure to work with."
                     </p>
-                    <p class="font-semibold text-white">- Jane Doe, CEO of InnovateCorp</p>
+                    <p class="font-semibold text-gray-800">- Jane Doe, CEO of InnovateCorp</p> <!-- Changed text color -->
                 </div>
-                <button class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-purple-500 focus:ring-opacity-50">
+                <button class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-red-500 focus:ring-opacity-50"> <!-- Changed button color -->
                     Join Our Satisfied Clients
                 </button>
             </div>
         </section>
 
         <!-- Contact Section -->
-        <section id="contact" class="py-16 px-4 sm:px-6 lg:px-8 bg-black/80 section-hidden">
+        <section id="contact" class="py-16 px-4 sm:px-6 lg:px-8 bg-white/80 section-hidden"> <!-- Changed background -->
             <div class="max-w-2xl mx-auto text-center">
-                <h2 class="text-3xl sm:text-4xl font-bold mb-8 text-blue-400">Get in Touch</h2>
-                <p class="text-lg text-gray-300 mb-8">
+                <h2 class="text-3xl sm:text-4xl font-bold mb-8 text-red-500">Get in Touch</h2> <!-- Changed title color -->
+                <p class="text-lg text-gray-700 mb-8"> <!-- Changed text color -->
                     Have a project in mind or just want to say hello? We'd love to hear from you!
                 </p>
                 <form class="space-y-6 text-left">
                     <div>
-                        <label for="name" class="block text-gray-300 text-sm font-bold mb-2">Name</label>
-                        <input type="text" id="name" name="name" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-900 leading-tight focus:outline-none focus:shadow-outline bg-gray-200/90 border-gray-600" placeholder="Your Name">
+                        <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Name</label> <!-- Changed text color -->
+                        <input type="text" id="name" name="name" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-900 leading-tight focus:outline-none focus:shadow-outline bg-gray-200/90 border-gray-400" placeholder="Your Name"> <!-- Changed border color -->
                     </div>
                     <div>
-                        <label for="email" class="block text-gray-300 text-sm font-bold mb-2">Email</label>
-                        <input type="email" id="email" name="email" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-900 leading-tight focus:outline-none focus:shadow-outline bg-gray-200/90 border-gray-600" placeholder="your@example.com">
+                        <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Email</label>
+                        <input type="email" id="email" name="email" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-900 leading-tight focus:outline-none focus:shadow-outline bg-gray-200/90 border-gray-400" placeholder="your@example.com">
                     </div>
                     <div>
-                        <label for="message" class="block text-gray-300 text-sm font-bold mb-2">Message</label>
-                        <textarea id="message" name="message" rows="5" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-900 leading-tight focus:outline-none focus:shadow-outline bg-gray-200/90 border-gray-600" placeholder="Your message..."></textarea>
+                        <label for="message" class="block text-gray-700 text-sm font-bold mb-2">Message</label>
+                        <textarea id="message" name="message" rows="5" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-900 leading-tight focus:outline-none focus:shadow-outline bg-gray-200/90 border-gray-400" placeholder="Your message..."></textarea>
                     </div>
                     <div class="text-center">
-                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50">
+                        <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-red-500 focus:ring-opacity-50"> <!-- Changed button color -->
                             Send Message
                         </button>
                     </div>
@@ -319,11 +304,11 @@ a-scene {
         </section>
 
         <!-- Footer -->
-        <footer class="bg-black/90 py-8 px-4 sm:px-6 lg:px-8 text-center text-gray-400">
+        <footer class="bg-white/90 py-8 px-4 sm:px-6 lg:px-8 text-center text-gray-700"> <!-- Changed background and text color -->
             <p>&copy; 2025 Your Company. All rights reserved.</p>
             <div class="mt-4 flex justify-center space-x-4">
-                <a href="#" class="hover:text-white transition duration-200">Privacy Policy</a>
-                <a href="#" class="hover:text-white transition duration-200">Terms of Service</a>
+                <a href="#" class="hover:text-red-600 transition duration-200">Privacy Policy</a> <!-- Changed hover color -->
+                <a href="#" class="hover:text-red-600 transition duration-200">Terms of Service</a>
             </div>
         </footer>
     </div>
@@ -385,6 +370,116 @@ a-scene {
             if (heroContent) {
                 heroContent.classList.add('section-visible');
             }
+        });
+
+        // Babylon.js Scene Setup
+        window.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.getElementById('renderCanvas');
+            const engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
+
+            const createScene = function() {
+                const scene = new BABYLON.Scene(engine);
+
+                // Set scene clear color to transparent black to allow HTML background to show through
+                scene.clearColor = new BABYLON.Color4(0, 0, 0, 0);
+
+                // Camera
+                const camera = new BABYLON.ArcRotateCamera("camera", Math.PI / 2, Math.PI / 2.5, 5, BABYLON.Vector3.Zero(), scene);
+                camera.attachControl(canvas, true);
+                camera.inputs.remove(camera.inputs.attached.mousewheel); // Disable mouse wheel zoom
+                camera.inputs.remove(camera.inputs.attached.keyboard); // Disable keyboard controls
+                camera.allowUpsideDown = false; // Prevent camera from going upside down
+
+                // Lights
+                const ambientLight = new BABYLON.HemisphericLight("ambientLight", new BABYLON.Vector3(0, 1, 0), scene);
+                ambientLight.intensity = 0.7; // Adjusted to be similar to A-Frame's ambient light
+
+                const directionalLight = new BABYLON.DirectionalLight("directionalLight", new BABYLON.Vector3(-1, -1, 1), scene);
+                directionalLight.intensity = 0.8; // Adjusted to be similar to A-Frame's directional light
+
+                // Load GLB model
+                // The 'rootUrl' is the path to the folder containing the .gltf/.glb and its assets (if any)
+                // The 'fileName' is the name of the .gltf/.glb file
+                BABYLON.SceneLoader.Append("https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/DamagedHelmet/glTF/", "DamagedHelmet.gltf", scene, function (scene) {
+                    // Scene is loaded
+                    const helmet = scene.getMeshByName("__root__"); // Get the root mesh of the loaded model
+                    if (helmet) {
+                        // Position, rotate, and scale the helmet
+                        helmet.position = new BABYLON.Vector3(0, 1.5, -3); // Similar to A-Frame position
+                        helmet.rotationQuaternion = null; // Clear rotation quaternion if any, to use Euler angles
+                        helmet.rotation = new BABYLON.Vector3(0, BABYLON.Tools.ToRadians(45), 0); // Initial rotation
+
+                        // Animation: Continuous rotation around Y-axis
+                        const frameRate = 60; // frames per second
+                        const animationDuration = 10; // seconds for one full rotation (360 degrees)
+                        const totalFrames = frameRate * animationDuration;
+
+                        const animation = new BABYLON.Animation(
+                            "helmetRotation",
+                            "rotation.y", // Animate rotation around Y axis
+                            frameRate,
+                            BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+                            BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE
+                        );
+
+                        const keys = [];
+                        keys.push({ frame: 0, value: helmet.rotation.y });
+                        keys.push({ frame: totalFrames, value: helmet.rotation.y + (2 * Math.PI) }); // Rotate 360 degrees
+
+                        animation.setKeys(keys);
+                        helmet.animations.push(animation);
+                        scene.beginAnimation(helmet, 0, totalFrames, true); // Start animation
+                    }
+                });
+
+                return scene;
+            };
+
+            const scene = createScene();
+
+            engine.runRenderLoop(function() {
+                scene.render();
+            });
+
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                engine.resize();
+            });
+
+            // Mouse interaction for camera control (similar to A-Frame's look-controls)
+            let isDragging = false;
+            let lastPointerX;
+            let lastPointerY;
+
+            canvas.addEventListener('pointerdown', (event) => {
+                isDragging = true;
+                lastPointerX = event.clientX;
+                lastPointerY = event.clientY;
+                canvas.setPointerCapture(event.pointerId);
+            });
+
+            canvas.addEventListener('pointerup', () => {
+                isDragging = false;
+                canvas.releasePointerCapture(event.pointerId);
+            });
+
+            canvas.addEventListener('pointermove', (event) => {
+                if (isDragging) {
+                    const deltaX = event.clientX - lastPointerX;
+                    const deltaY = event.clientY - lastPointerY;
+
+                    // Adjust camera alpha (yaw) and beta (pitch) based on mouse movement
+                    // You might need to fine-tune these sensitivity values
+                    scene.activeCamera.alpha -= deltaX * 0.005;
+                    scene.activeCamera.beta += deltaY * 0.005;
+
+                    // Clamp beta to prevent flipping (e.g., between 0.1 and PI - 0.1)
+                    scene.activeCamera.beta = Math.max(0.1, Math.min(Math.PI - 0.1, scene.activeCamera.beta));
+
+                    lastPointerX = event.clientX;
+                    lastPointerY = event.clientY;
+                }
+            });
         });
 
     </script>
